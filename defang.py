@@ -11,12 +11,16 @@ def return_defanged(fanged_str:str, protocol_defang = False) -> str:
          fanged_str = fanged_str.replace("ftp","fXp",1)
 
    # check if url has been defanged already
-   if "[.]" in fanged_str:
+   if "[.]" in fanged_str or "[:]" in fanged_str:
       print("URL seems to be defanged already...")
    
-   for i in range(len(fanged_str)):
+   for i in range(len(fanged_str) - 1):
+      # defang ipv4
       if fanged_str[i] == "." and fanged_str[i-1] != "[" and fanged_str[i+1] != "]":
          defanged_str += "[.]"
+      # defang ipv6
+      elif fanged_str[i] == ":" and fanged_str[i-1] != "[" and fanged_str[i+1] != "]":
+         defanged_str += "[:]"
       else:
          defanged_str += fanged_str[i]
    
